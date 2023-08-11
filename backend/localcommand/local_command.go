@@ -1,6 +1,7 @@
 package localcommand
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -104,6 +105,10 @@ func (lcmd *LocalCommand) Close() error {
 }
 
 func (lcmd *LocalCommand) WindowTitleVariables() map[string]interface{} {
+	fmt.Println("What am I doing here? ")
+	fmt.Printf("lcmd = %+v\n", lcmd)
+	fmt.Printf("does this process exist? %d\n", lcmd.cmd.Process.Pid)
+
 	return map[string]interface{}{
 		"command": lcmd.command,
 		"argv":    lcmd.argv,

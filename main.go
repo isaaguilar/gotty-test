@@ -13,10 +13,13 @@ import (
 	cli "github.com/urfave/cli/v2"
 
 	"github.com/sorenisanerd/gotty/backend/localcommand"
+	"github.com/sorenisanerd/gotty/backend/podexec"
 	"github.com/sorenisanerd/gotty/pkg/homedir"
 	"github.com/sorenisanerd/gotty/server"
 	"github.com/sorenisanerd/gotty/utils"
 )
+
+var Version = "unknown_version"
 
 func main() {
 	app := cli.NewApp()
@@ -84,9 +87,14 @@ func main() {
 		}
 
 		args := c.Args()
-		factory, err := localcommand.NewFactory(args.First(), args.Tail(), backendOptions)
+		var factory server.Factory
+
+		factory, err = localcommand.NewFactory(args.First(), args.Tail(), backendOptions)
 		if err != nil {
 			exit(err, 3)
+		}
+		if factory.Name() != "rubbish" {
+			factory = &podexec.PodExecFactory{}
 		}
 
 		hostname, _ := os.Hostname()
